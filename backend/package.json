@@ -10,6 +10,7 @@
     "seed": "node scripts/seedMasterData.js",
     "seed-basic": "node scripts/seedBasic.js",
     "setup-production": "node scripts/setupProduction.js",
+    "debug-login": "node scripts/debugLogin.js",
     "seed-products": "node scripts/seedCosmeticProducts.js",
     "seed-banners": "node scripts/seedComprehensiveBanners.js",
     "create-admin": "node scripts/createAdmin.js"

@@ -16,13 +16,18 @@ if ! command -v pm2 &> /dev/null; then
     npm install -g pm2
 fi
 
-# Stop any existing processes
-pm2 stop all 2>/dev/null || true
-pm2 delete all 2>/dev/null || true
+# Stop only elissh processes (preserve other apps)
+pm2 stop elissh-backend 2>/dev/null || true
+pm2 delete elissh-backend 2>/dev/null || true
 
 # Start backend with PM2
 echo "🔧 Starting backend server..."
 pm2 start ecosystem.config.js
+
+# Restart other existing apps
+echo "🔄 Restarting other applications..."
+pm2 restart lmsorbit 2>/dev/null || true
+pm2 restart rest-express 2>/dev/null || true
 
 # Show status
 pm2 status

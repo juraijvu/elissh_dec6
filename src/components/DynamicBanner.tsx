@@ -13,6 +13,13 @@ const DynamicBanner = ({ area, className = '', fallbackImage, aspectRatio = 'asp
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const getImageUrl = (image) => {
+    if (!image) return null;
+    if (image.startsWith('http')) return image;
+    const baseUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001';
+    return `${baseUrl}${image}`;
+  };
+
   useEffect(() => {
     const loadBanners = async () => {
       try {
@@ -30,8 +37,10 @@ const DynamicBanner = ({ area, className = '', fallbackImage, aspectRatio = 'asp
     
     // Listen for banner updates
     const handleBannerUpdate = () => {
-      console.log(`Banners updated for area: ${area}, refreshing...`);
-      loadBanners();
+      console.log(`🔄 Banner update event for area: ${area}, refreshing...`);
+      setTimeout(() => {
+        loadBanners();
+      }, 100);
     };
     
     window.addEventListener('bannersUpdated', handleBannerUpdate);
@@ -93,7 +102,7 @@ const DynamicBanner = ({ area, className = '', fallbackImage, aspectRatio = 'asp
         onClick={() => handleBannerClick(banner)}
       >
         <img 
-          src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${banner.image}`}
+          src={getImageUrl(banner.image)}
           alt={banner.heading || 'Banner'} 
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />

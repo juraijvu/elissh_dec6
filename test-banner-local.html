@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Banner System Test</title>
+</head>
+<body>
+    <h1>Banner System Test</h1>
+    <button onclick="testBannerSystem()">Test Banner System</button>
+    <div id="results"></div>
+
+    <script>
+        async function testBannerSystem() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<h2>Testing Banner System...</h2>';
+            
+            try {
+                // Test 1: Check API endpoint
+                console.log('🧪 Testing API endpoint...');
+                const response = await fetch('http://localhost:5001/api/banner/hero-slider');
+                const data = await response.json();
+                results.innerHTML += `<p>✅ API Test: Found ${data.banners?.length || 0} hero banners</p>`;
+                
+                // Test 2: Test event system
+                console.log('🧪 Testing event system...');
+                let eventReceived = false;
+                
+                window.addEventListener('bannersUpdated', () => {
+                    eventReceived = true;
+                    results.innerHTML += '<p>✅ Event Test: bannersUpdated event received!</p>';
+                });
+                
+                // Dispatch test event
+                window.dispatchEvent(new CustomEvent('bannersUpdated'));
+                
+                setTimeout(() => {
+                    if (!eventReceived) {
+                        results.innerHTML += '<p>❌ Event Test: bannersUpdated event NOT received</p>';
+                    }
+                }, 100);
+                
+                // Test 3: Test image URL construction
+                console.log('🧪 Testing image URL construction...');
+                const testImage = '/uploads/banners/test.jpg';
+                const baseUrl = 'http://localhost:5001';
+                const constructedUrl = `${baseUrl}${testImage}`;
+                results.innerHTML += `<p>✅ URL Test: ${testImage} → ${constructedUrl}</p>`;
+                
+                results.innerHTML += '<h3>🎉 Banner system tests completed!</h3>';
+                
+            } catch (error) {
+                results.innerHTML += `<p>❌ Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

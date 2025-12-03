@@ -20,6 +20,8 @@ import bannerRoutes from './routes/banner.js';
 import uploadRoutes from './routes/upload.js';
 import walletRoutes from './routes/wallet.js';
 import paymentRoutes from './routes/payments.js';
+import seoRoutes from './routes/seo.js';
+import sitemapRoutes from './routes/sitemap.js';
 
 dotenv.config();
 
@@ -87,6 +89,8 @@ app.use('/api/banner', bannerRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/wallet', walletRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/seo', seoRoutes);
+app.use('/api/sitemap', sitemapRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

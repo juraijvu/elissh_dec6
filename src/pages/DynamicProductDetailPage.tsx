@@ -11,6 +11,8 @@ import { Heart, Share2, Star, Plus, Minus, ShoppingBag, Truck, RotateCcw, Shield
 import { useAuth } from "@/contexts/AuthContext";
 import { cartAPI, wishlistAPI, productsAPI } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import SEOHead from "@/components/SEOHead";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const DynamicProductDetailPage = () => {
   const { id } = useParams();
@@ -138,23 +140,62 @@ const DynamicProductDetailPage = () => {
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
 
+  // Generate SEO data
+  const seoTitle = product.metaTitle || `${product.name} - ${product.brand} | Elissh Beauty`;
+  const seoDescription = product.metaDescription || `Shop ${product.name} by ${product.brand}. ${product.shortDescription || product.description.substring(0, 120)}. Free shipping in UAE.`;
+  const seoKeywords = product.seoKeywords || [product.name.toLowerCase(), product.brand.toLowerCase(), 'cosmetics uae', 'beauty products'];
+  const canonicalUrl = `https://elissh.com/product/${product.slug || product.id}`;
+  
+  // Generate structured data
+  const structuredData = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": product.name,
+    "brand": {
+      "@type": "Brand",
+      "name": product.brand
+    },
+    "description": product.description,
+    "sku": product.sku,
+    "image": product.images?.map(img => `http://localhost:5001${img}`) || [],
+    "offers": {
+      "@type": "Offer",
+      "price": product.price,
+      "priceCurrency": "AED",
+      "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      "seller": {
+        "@type": "Organization",
+        "name": "Elissh Beauty"
+      }
+    },
+    "aggregateRating": product.rating?.count > 0 ? {
+      "@type": "AggregateRating",
+      "ratingValue": product.rating.average,
+      "reviewCount": product.rating.count
+    } : undefined
+  };
+
+  const breadcrumbItems = [
+    { label: product.category?.name || 'Products', href: `/category/${product.category?.slug || 'products'}` },
+    { label: product.name }
+  ];
+
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title={seoTitle}
+        description={seoDescription}
+        keywords={seoKeywords}
+        canonicalUrl={canonicalUrl}
+        ogImage={product.images?.[0] ? `http://localhost:5001${product.images[0]}` : undefined}
+        ogType="product"
+        structuredData={structuredData}
+      />
       <Header />
       
       <div className="container mx-auto px-4 py-12">
         {/* Breadcrumb */}
-        <div className="text-sm text-muted-foreground mb-8 flex items-center gap-2">
-          <button onClick={() => window.location.href = '/'} className="hover:text-foreground transition-colors">
-            Home
-          </button>
-          <span>/</span>
-          <button onClick={() => window.location.href = `/category/${product.category?.slug || 'products'}`} className="hover:text-foreground transition-colors">
-            {product.category?.name || 'Products'}
-          </button>
-          <span>/</span>
-          <span>{product.name}</span>
-        </div>
+        <Breadcrumbs items={breadcrumbItems} className="mb-8" />
 
         {/* Product Section */}
         <div className="grid lg:grid-cols-2 gap-12 mb-16">

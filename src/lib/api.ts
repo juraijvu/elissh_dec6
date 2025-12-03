@@ -46,13 +46,16 @@ export const authAPI = {
 export const bannerAPI = {
   getBanners: async (area: string) => {
     try {
-      const response = await fetch(`${API_BASE}/banner/${area}`, {
-        headers: {
-          'Cache-Control': 'no-cache'
-        }
-      });
-      if (!response.ok) throw new Error('Failed to fetch');
-      return await response.json();
+      const url = `${API_BASE}/banner/${area}?t=${Date.now()}`;
+      console.log(`🔍 Fetching banners for ${area} from:`, url);
+      const response = await fetch(url);
+      if (!response.ok) {
+        console.error(`❌ Banner API error: ${response.status} ${response.statusText}`);
+        throw new Error('Failed to fetch');
+      }
+      const data = await response.json();
+      console.log(`✅ Banners loaded for ${area}:`, data.banners?.length || 0, 'banners');
+      return data;
     } catch (error) {
       console.error('Error fetching banners:', error);
       return { success: false, banners: [] };
@@ -212,6 +215,41 @@ export const wishlistAPI = {
   }
 };
 
+export const seoAPI = {
+  getByEntity: async (entityType: string, entityId: number) => {
+    const response = await apiCall(`/seo/${entityType}/${entityId}`);
+    return await response.json();
+  },
+  getBySlug: async (slug: string) => {
+    const response = await apiCall(`/seo/slug/${slug}`);
+    return await response.json();
+  },
+  create: async (data: any) => {
+    const response = await apiCall('/seo', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+    return await response.json();
+  },
+  update: async (id: number, data: any) => {
+    const response = await apiCall(`/seo/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+    return await response.json();
+  },
+  generateSuggestions: async (entityType: string, entityId: number) => {
+    const response = await apiCall(`/seo/generate/${entityType}/${entityId}`, {
+      method: 'POST'
+    });
+    return await response.json();
+  },
+  getSchema: async (entityType: string, entityId: number) => {
+    const response = await apiCall(`/seo/schema/${entityType}/${entityId}`);
+    return await response.json();
+  }
+};
+
 const api = {
   apiCall,
   authAPI,
@@ -220,6 +258,7 @@ const api = {
   productsAPI,
   cartAPI,
   wishlistAPI,
+  seoAPI,
   
   // HTTP methods
   get: async (endpoint: string) => {

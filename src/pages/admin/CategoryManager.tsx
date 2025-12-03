@@ -28,6 +28,21 @@ const CategoryManager = () => {
     sortOrder: 1,
     metaTitle: '',
     metaDescription: '',
+    seoKeywords: '',
+    seoContent: '',
+    h1Tag: '',
+    primaryKeyword: '',
+    focusKeyword: '',
+    altText: '',
+    canonicalUrl: '',
+    seoScore: '0.8',
+    noIndex: false,
+    noFollow: false,
+    enableSchema: true,
+    ogTitle: '',
+    ogDescription: '',
+    twitterTitle: '',
+    twitterDescription: '',
     showOnHomepage: false
   });
   const { toast } = useToast();
@@ -81,8 +96,23 @@ const CategoryManager = () => {
       parentId: category.parentId,
       isActive: category.isActive,
       sortOrder: category.sortOrder,
-      metaTitle: category.metaTitle,
-      metaDescription: category.metaDescription,
+      metaTitle: category.metaTitle || '',
+      metaDescription: category.metaDescription || '',
+      seoKeywords: Array.isArray(category.seoKeywords) ? category.seoKeywords.join(', ') : (category.seoKeywords || ''),
+      seoContent: category.seoContent || '',
+      h1Tag: category.h1Tag || '',
+      primaryKeyword: category.primaryKeyword || '',
+      focusKeyword: category.focusKeyword || '',
+      altText: category.altText || '',
+      canonicalUrl: category.canonicalUrl || '',
+      seoScore: category.seoScore?.toString() || '0.8',
+      noIndex: category.noIndex || false,
+      noFollow: category.noFollow || false,
+      enableSchema: category.enableSchema ?? true,
+      ogTitle: category.ogTitle || '',
+      ogDescription: category.ogDescription || '',
+      twitterTitle: category.twitterTitle || '',
+      twitterDescription: category.twitterDescription || '',
       showOnHomepage: category.showOnHomepage
     });
     setIsDialogOpen(true);
@@ -113,6 +143,8 @@ const CategoryManager = () => {
       sortOrder: 1,
       metaTitle: '',
       metaDescription: '',
+      seoKeywords: '',
+      seoContent: '',
       showOnHomepage: false
     });
     setEditingCategory(null);
@@ -224,22 +256,45 @@ const CategoryManager = () => {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">SEO Settings</h3>
                 <div>
-                  <Label htmlFor="metaTitle">Meta Title</Label>
+                  <Label htmlFor="metaTitle">SEO Title (≤60 chars)</Label>
                   <Input
                     id="metaTitle"
                     value={formData.metaTitle}
                     onChange={(e) => setFormData(prev => ({ ...prev, metaTitle: e.target.value }))}
-                    placeholder="SEO title for search engines"
+                    placeholder={`${formData.name} - Premium Beauty Products | Elissh`}
+                    maxLength={60}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">{(formData.metaTitle || '').length}/60</p>
+                </div>
+                <div>
+                  <Label htmlFor="metaDescription">Meta Description (≤155 chars)</Label>
+                  <Textarea
+                    id="metaDescription"
+                    rows={3}
+                    value={formData.metaDescription}
+                    onChange={(e) => setFormData(prev => ({ ...prev, metaDescription: e.target.value }))}
+                    placeholder={`Discover premium ${formData.name?.toLowerCase()} products. Shop authentic beauty brands with free shipping in UAE.`}
+                    maxLength={155}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">{(formData.metaDescription || '').length}/155</p>
+                </div>
+                <div>
+                  <Label htmlFor="seoKeywords">SEO Keywords (comma-separated)</Label>
+                  <Input
+                    id="seoKeywords"
+                    value={formData.seoKeywords || ''}
+                    onChange={(e) => setFormData(prev => ({ ...prev, seoKeywords: e.target.value }))}
+                    placeholder={`${formData.name?.toLowerCase()}, beauty products uae, cosmetics online`}
                   />
                 </div>
                 <div>
-                  <Label htmlFor="metaDescription">Meta Description</Label>
+                  <Label htmlFor="seoContent">SEO Content (for category page)</Label>
                   <Textarea
-                    id="metaDescription"
-                    rows={2}
-                    value={formData.metaDescription}
-                    onChange={(e) => setFormData(prev => ({ ...prev, metaDescription: e.target.value }))}
-                    placeholder="SEO description for search engines"
+                    id="seoContent"
+                    rows={4}
+                    value={formData.seoContent || ''}
+                    onChange={(e) => setFormData(prev => ({ ...prev, seoContent: e.target.value }))}
+                    placeholder="Additional SEO content, buying guides, category information..."
                   />
                 </div>
               </div>

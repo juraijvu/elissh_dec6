@@ -1,6 +1,6 @@
 import express from 'express';
 import { Op } from 'sequelize';
-import { Product, Category, Banner, User, Order } from '../models/index.js';
+import { Product, Category, Banner, User, Order, Wallet } from '../models/index.js';
 import { protect, admin } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -12,6 +12,8 @@ router.use(admin);
 // Get dashboard statistics
 router.get('/dashboard', async (req, res) => {
   try {
+    const { Wallet } = await import('../models/index.js');
+    
     const [
       totalProducts,
       totalCategories,
@@ -20,7 +22,9 @@ router.get('/dashboard', async (req, res) => {
       totalOrders,
       recentOrders,
       lowStockProducts,
-      recentUsers
+      recentUsers,
+      productStats,
+      walletStats
     ] = await Promise.all([
       Product.count(),
       Category.count(),
@@ -31,33 +35,62 @@ router.get('/dashboard', async (req, res) => {
         include: [{
           model: User,
           as: 'User',
-          attributes: ['id', 'name', 'email', 'firstName', 'lastName']
+          attributes: ['id', 'firstName', 'lastName', 'email']
         }],
         order: [['createdAt', 'DESC']],
-        limit: 5
+        limit: 10,
+        attributes: ['id', 'orderNumber', 'total', 'status', 'createdAt']
       }),
       Product.findAll({
         where: {
           stock: { [Op.lte]: 10 }
         },
         limit: 10,
-        order: [['stock', 'ASC']]
+        order: [['stock', 'ASC']],
+        attributes: ['id', 'name', 'stock', 'price']
       }),
       User.findAll({
+        include: [{
+          model: Wallet,
+          attributes: ['balance', 'loyaltyPoints']
+        }],
         order: [['createdAt', 'DESC']],
         limit: 10,
         attributes: ['id', 'firstName', 'lastName', 'email', 'role', 'createdAt']
+      }),
+      Product.findAll({
+        attributes: [
+          [Product.sequelize.fn('AVG', Product.sequelize.col('price')), 'avgPrice'],
+          [Product.sequelize.fn('SUM', Product.sequelize.literal('price * stock')), 'totalValue']
+        ],
+        raw: true
+      }),
+      Wallet.findAll({
+        attributes: [
+          [Wallet.sequelize.fn('SUM', Wallet.sequelize.col('balance')), 'totalBalance'],
+          [Wallet.sequelize.fn('SUM', Wallet.sequelize.col('loyaltyPoints')), 'totalPoints'],
+          [Wallet.sequelize.fn('AVG', Wallet.sequelize.col('loyaltyPoints')), 'avgPoints']
+        ],
+        raw: true
       })
     ]);
 
     // Calculate revenue (sum of completed orders)
     const revenueResult = await Order.sum('total', {
       where: {
-        status: ['delivered', 'completed']
+        status: ['delivered']
       }
     });
 
     const revenue = revenueResult || 0;
+    const verifiedUsers = await User.count({ where: { isVerified: true } });
+    
+    // Extract calculated values
+    const avgProductPrice = parseFloat(productStats[0]?.avgPrice || 0);
+    const totalProductValue = parseFloat(productStats[0]?.totalValue || 0);
+    const totalWalletBalance = parseFloat(walletStats[0]?.totalBalance || 0);
+    const totalLoyaltyPoints = parseInt(walletStats[0]?.totalPoints || 0);
+    const avgLoyaltyPoints = parseFloat(walletStats[0]?.avgPoints || 0);
 
     res.json({
       success: true,
@@ -70,14 +103,21 @@ router.get('/dashboard', async (req, res) => {
           totalOrders,
           revenue,
           stockAlerts: lowStockProducts.length,
-          verifiedUsers: totalUsers, // Simplified for now
-          totalLoyaltyPoints: 0, // Will be calculated when wallet system is implemented
-          totalWalletBalance: 0, // Will be calculated when wallet system is implemented
-          avgLoyaltyPoints: 0, // Will be calculated when wallet system is implemented
-          totalProductValue: 0, // Will be calculated
-          avgProductPrice: 0 // Will be calculated
+          verifiedUsers: verifiedUsers || 0,
+          totalLoyaltyPoints,
+          totalWalletBalance,
+          avgLoyaltyPoints,
+          totalProductValue,
+          avgProductPrice
         },
-        recentOrders,
+        recentOrders: recentOrders.map(order => ({
+          id: order.id,
+          orderNumber: order.orderNumber,
+          total: order.total,
+          status: order.status,
+          createdAt: order.createdAt,
+          User: order.User
+        })),
         lowStockProducts,
         recentUsers
       }

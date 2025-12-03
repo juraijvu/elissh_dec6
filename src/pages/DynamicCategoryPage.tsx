@@ -7,6 +7,8 @@ import { useParams } from "react-router-dom";
 import { Filter, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { productsAPI, categoriesAPI } from "@/lib/api";
+import SEOHead from "@/components/SEOHead";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import makeupImage from "@/assets/category-makeup.jpg";
 import skincareImage from "@/assets/category-skincare.jpg";
 import fragranceImage from "@/assets/category-fragrance.jpg";
@@ -81,6 +83,60 @@ const DynamicCategoryPage = () => {
     description: currentCategory?.description || `Explore our ${category} collection`
   };
 
+  // Generate SEO data
+  const seoTitle = currentCategory?.metaTitle || `${categoryData.title} - Premium Beauty Products | Elissh`;
+  const seoDescription = currentCategory?.metaDescription || `Discover premium ${categoryData.title.toLowerCase()} products. Shop authentic beauty brands with free shipping in UAE. Best prices guaranteed.`;
+  const seoKeywords = currentCategory?.seoKeywords || [categoryData.title.toLowerCase(), `${categoryData.title.toLowerCase()} uae`, 'beauty products', 'cosmetics'];
+  const canonicalUrl = `https://elissh.com/category/${currentCategory?.slug || category}`;
+  
+  // Generate structured data
+  const structuredData = {
+    "@context": "https://schema.org/",
+    "@type": "CollectionPage",
+    "name": categoryData.title,
+    "description": categoryData.description,
+    "url": canonicalUrl,
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://elissh.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": categoryData.title,
+          "item": canonicalUrl
+        }
+      ]
+    },
+    "mainEntity": {
+      "@type": "ItemList",
+      "numberOfItems": products.length,
+      "itemListElement": products.slice(0, 10).map((product, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "item": {
+          "@type": "Product",
+          "name": product.name,
+          "brand": product.brand,
+          "offers": {
+            "@type": "Offer",
+            "price": product.price,
+            "priceCurrency": "AED"
+          }
+        }
+      }))
+    }
+  };
+
+  const breadcrumbItems = [
+    { label: categoryData.title }
+  ];
+
   const filteredProducts = products.filter(product => {
     // Apply price filters
     if (filters.priceRange.length > 0) {
@@ -144,17 +200,19 @@ const DynamicCategoryPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title={seoTitle}
+        description={seoDescription}
+        keywords={seoKeywords}
+        canonicalUrl={canonicalUrl}
+        ogImage={categoryData.image}
+        structuredData={structuredData}
+      />
       <Header />
       
       {/* Breadcrumb */}
       <div className="container mx-auto px-4 py-4">
-        <div className="text-sm text-muted-foreground flex items-center gap-2">
-          <button onClick={() => window.location.href = '/'} className="hover:text-foreground transition-colors">
-            Home
-          </button>
-          <span>/</span>
-          <span className="capitalize">{categoryData.title}</span>
-        </div>
+        <Breadcrumbs items={breadcrumbItems} />
       </div>
 
       {/* Category Header */}
@@ -310,6 +368,17 @@ const DynamicCategoryPage = () => {
           </div>
         </div>
       </section>
+
+      {/* SEO Content Section */}
+      {currentCategory?.seoContent && (
+        <section className="container mx-auto px-4 py-12">
+          <div className="max-w-4xl mx-auto">
+            <div className="prose prose-lg max-w-none">
+              <div dangerouslySetInnerHTML={{ __html: currentCategory.seoContent }} />
+            </div>
+          </div>
+        </section>
+      )}
 
       <Footer />
     </div>

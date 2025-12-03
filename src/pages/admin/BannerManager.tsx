@@ -258,12 +258,19 @@ const BannerManager = () => {
         resetForm();
         // Immediately reload banners
         await loadBanners();
-        // Trigger a refresh of homepage banners
+        // Trigger a refresh of homepage banners with multiple events
+        console.log('🚀 Dispatching bannersUpdated events...');
         window.dispatchEvent(new CustomEvent('bannersUpdated'));
-        // Also dispatch with a slight delay to ensure components are ready
+        window.dispatchEvent(new CustomEvent('bannerChanged'));
+        // Also dispatch with delays to ensure components are ready
+        setTimeout(() => {
+          console.log('🚀 Dispatching delayed bannersUpdated events...');
+          window.dispatchEvent(new CustomEvent('bannersUpdated'));
+          window.dispatchEvent(new CustomEvent('bannerChanged'));
+        }, 200);
         setTimeout(() => {
           window.dispatchEvent(new CustomEvent('bannersUpdated'));
-        }, 100);
+        }, 500);
       } else {
         throw new Error(result.message || 'Failed to save banner');
       }

@@ -63,6 +63,12 @@ const EnhancedAdminDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No auth token found');
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch('http://localhost:5001/api/admin/dashboard', {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -70,7 +76,13 @@ const EnhancedAdminDashboard = () => {
         }
       });
       
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
       const data = await response.json();
+      console.log('Dashboard data received:', data);
+      
       if (data.success) {
         setStats({
           ...data.data.stats,
@@ -108,9 +120,59 @@ const EnhancedAdminDashboard = () => {
         });
         
         setNotifications(dynamicNotifications);
+      } else {
+        console.error('Dashboard API returned error:', data.message);
+        // Set default empty stats to prevent crashes
+        setStats({
+          totalProducts: 0,
+          totalUsers: 0,
+          totalCategories: 0,
+          verifiedUsers: 0,
+          stockAlerts: 0,
+          avgProductPrice: 0,
+          totalProductValue: 0,
+          totalOrders: 0,
+          totalLoyaltyPoints: 0,
+          totalWalletBalance: 0,
+          avgLoyaltyPoints: 0,
+          lowStockProducts: [],
+          recentUsers: [],
+          recentOrders: []
+        });
+        setNotifications([{
+          id: 1,
+          type: 'error',
+          message: 'Failed to load dashboard data',
+          priority: 'high',
+          time: 'Now'
+        }]);
       }
     } catch (error) {
       console.error('Dashboard error:', error);
+      // Set default empty stats to prevent crashes
+      setStats({
+        totalProducts: 0,
+        totalUsers: 0,
+        totalCategories: 0,
+        verifiedUsers: 0,
+        stockAlerts: 0,
+        avgProductPrice: 0,
+        totalProductValue: 0,
+        totalOrders: 0,
+        totalLoyaltyPoints: 0,
+        totalWalletBalance: 0,
+        avgLoyaltyPoints: 0,
+        lowStockProducts: [],
+        recentUsers: [],
+        recentOrders: []
+      });
+      setNotifications([{
+        id: 1,
+        type: 'error',
+        message: `Dashboard error: ${error.message}`,
+        priority: 'high',
+        time: 'Now'
+      }]);
     } finally {
       setLoading(false);
     }
@@ -185,10 +247,23 @@ const EnhancedAdminDashboard = () => {
 
   return (
     <div className="p-6 pt-2 space-y-6">
+      {/* Header with Refresh Button */}
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+          <p className="text-muted-foreground">Overview of your store performance and metrics</p>
+        </div>
+        <Button onClick={fetchDashboardData} disabled={loading} variant="outline">
+          <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+          {loading ? 'Loading...' : 'Refresh Data'}
+        </Button>
+      </div>
+
       {loading ? (
-        <div className="text-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p>Loading dashboard data...</p>
+        <div className="text-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-lg font-medium">Loading dashboard data...</p>
+          <p className="text-sm text-muted-foreground mt-2">Fetching real-time statistics and metrics</p>
         </div>
       ) : (
         <>

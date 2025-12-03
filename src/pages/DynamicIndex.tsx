@@ -7,12 +7,15 @@ import { Footer } from "@/components/Footer";
 import DynamicBanner from "@/components/DynamicBanner";
 import { Sparkles, TrendingUp, Clock, Gift } from "lucide-react";
 import { productsAPI, categoriesAPI } from "@/lib/api";
+import { useSEO } from "@/hooks/useSEO";
 import skincareImage from "@/assets/category-skincare.jpg";
 import makeupImage from "@/assets/category-makeup.jpg";
 import fragranceImage from "@/assets/category-fragrance.jpg";
 import haircareImage from "@/assets/category-haircare.jpg";
 
 const DynamicIndex = () => {
+  useSEO('home');
+  
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [saleProducts, setSaleProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]);

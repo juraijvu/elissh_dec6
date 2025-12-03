@@ -7,6 +7,7 @@ import Wallet from './Wallet.js';
 import Cart from './Cart.js';
 import Wishlist from './Wishlist.js';
 import PaymentSettings from './PaymentSettings.js';
+import SEO from './SEO.js';
 
 // Set up associations
 Product.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });
@@ -25,4 +26,18 @@ Wishlist.belongsTo(User, { foreignKey: 'userId' });
 User.hasMany(Order, { foreignKey: 'userId', as: 'orders' });
 Order.belongsTo(User, { foreignKey: 'userId', as: 'User' });
 
-export { Product, Category, Banner, User, Order, Wallet, Cart, Wishlist, PaymentSettings };
+// SEO associations - simplified without scope
+Product.hasOne(SEO, { 
+  foreignKey: 'entityId',
+  as: 'seo',
+  constraints: false
+});
+Category.hasOne(SEO, { 
+  foreignKey: 'entityId',
+  as: 'seo',
+  constraints: false
+});
+SEO.belongsTo(Product, { foreignKey: 'entityId', constraints: false });
+SEO.belongsTo(Category, { foreignKey: 'entityId', constraints: false });
+
+export { Product, Category, Banner, User, Order, Wallet, Cart, Wishlist, PaymentSettings, SEO };

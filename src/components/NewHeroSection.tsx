@@ -11,6 +11,13 @@ const NewHeroSection = () => {
   const [bottomRightBanner, setBottomRightBanner] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
+  const getImageUrl = (image) => {
+    if (!image) return null;
+    if (image.startsWith('http')) return image;
+    const baseUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001';
+    return `${baseUrl}${image}`;
+  };
+
   // Fallback banner if no CMS data
   const fallbackHero = {
     image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&h=350&fit=crop',
@@ -23,7 +30,8 @@ const NewHeroSection = () => {
   useEffect(() => {
     const loadBanners = async () => {
       try {
-            const [hero, left, right, bottomLeft, bottomRight] = await Promise.all([
+        console.log('🏠 Loading hero section banners...');
+        const [hero, left, right, bottomLeft, bottomRight] = await Promise.all([
           bannerAPI.getBanners('hero-slider'),
           bannerAPI.getBanners('hero-left'),
           bannerAPI.getBanners('hero-right'),
@@ -36,6 +44,14 @@ const NewHeroSection = () => {
         const rightData = right.banners || [];
         const bottomLeftData = bottomLeft.banners || [];
         const bottomRightData = bottomRight.banners || [];
+        
+        console.log('📊 Banner counts:', {
+          hero: heroData.length,
+          left: leftData.length,
+          right: rightData.length,
+          bottomLeft: bottomLeftData.length,
+          bottomRight: bottomRightData.length
+        });
         
         setHeroBanner(heroData[0] || fallbackHero);
         setLeftBanner(leftData[0]);
@@ -52,14 +68,25 @@ const NewHeroSection = () => {
     
     // Listen for banner updates
     const handleBannerUpdate = () => {
+      console.log('🔄 Banner update event received, refreshing hero banners...');
+      setRefreshKey(prev => prev + 1);
+      setTimeout(() => {
+        loadBanners();
+      }, 100);
+    };
+    
+    const handleBannerChanged = () => {
+      console.log('🔄 Banner changed event received, force refreshing...');
       setRefreshKey(prev => prev + 1);
       loadBanners();
     };
     
     window.addEventListener('bannersUpdated', handleBannerUpdate);
+    window.addEventListener('bannerChanged', handleBannerChanged);
     
     return () => {
       window.removeEventListener('bannersUpdated', handleBannerUpdate);
+      window.removeEventListener('bannerChanged', handleBannerChanged);
     };
   }, [refreshKey]);
 
@@ -72,7 +99,8 @@ const NewHeroSection = () => {
         {/* Main Hero Banner - Full Width on Mobile */}
         <div className="h-[200px] sm:h-[250px] relative rounded-lg overflow-hidden cursor-pointer">
           <img 
-            src={currentBanner.image?.startsWith('http') ? currentBanner.image : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${currentBanner.image}`} 
+            key={`hero-mobile-${refreshKey}-${currentBanner.id || 'fallback'}`}
+            src={getImageUrl(currentBanner.image) || currentBanner.image} 
             alt={currentBanner.heading}
             className="w-full h-full object-cover"
           />
@@ -95,14 +123,16 @@ const NewHeroSection = () => {
         <div className="grid grid-cols-2 gap-3 h-[120px] sm:h-[140px]">
           <div className="relative rounded-lg overflow-hidden cursor-pointer">
             <img 
-              src={leftBanner?.image ? `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${leftBanner.image}` : 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=200&h=140&fit=crop'} 
+              key={`left-mobile-${refreshKey}-${leftBanner?.id || 'fallback'}`}
+              src={getImageUrl(leftBanner?.image) || 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=200&h=140&fit=crop'} 
               alt={leftBanner?.heading || 'Side Banner'} 
               className="w-full h-full object-cover"
             />
           </div>
           <div className="relative rounded-lg overflow-hidden cursor-pointer">
             <img 
-              src={rightBanner?.image ? `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${rightBanner.image}` : 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=200&h=140&fit=crop'} 
+              key={`right-mobile-${refreshKey}-${rightBanner?.id || 'fallback'}`}
+              src={getImageUrl(rightBanner?.image) || 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=200&h=140&fit=crop'} 
               alt={rightBanner?.heading || 'Side Banner'} 
               className="w-full h-full object-cover"
             />
@@ -113,14 +143,14 @@ const NewHeroSection = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 h-auto">
           <div className="h-[120px] sm:h-[140px] relative rounded-lg overflow-hidden cursor-pointer">
             <img 
-              src={bottomLeftBanner?.image ? `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${bottomLeftBanner.image}` : 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=140&fit=crop'} 
+              src={getImageUrl(bottomLeftBanner?.image) || 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=140&fit=crop'} 
               alt={bottomLeftBanner?.heading || 'Makeup Collection'} 
               className="w-full h-full object-cover"
             />
           </div>
           <div className="h-[120px] sm:h-[140px] relative rounded-lg overflow-hidden cursor-pointer">
             <img 
-              src={bottomRightBanner?.image ? `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${bottomRightBanner.image}` : 'https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&h=140&fit=crop'} 
+              src={getImageUrl(bottomRightBanner?.image) || 'https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&h=140&fit=crop'} 
               alt={bottomRightBanner?.heading || 'Skincare Essentials'} 
               className="w-full h-full object-cover"
             />
@@ -134,7 +164,7 @@ const NewHeroSection = () => {
         <div className="w-[200px] h-full">
           <div className="relative w-full h-full rounded overflow-hidden cursor-pointer">
             <img 
-              src={leftBanner?.image ? `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${leftBanner.image}` : 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=200&h=500&fit=crop'} 
+              src={getImageUrl(leftBanner?.image) || 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=200&h=500&fit=crop'} 
               alt={leftBanner?.heading || 'Side Banner'} 
               className="w-full h-full object-cover"
             />
@@ -146,7 +176,7 @@ const NewHeroSection = () => {
           {/* Top Hero Banner Area */}
           <div className="h-[250px] relative rounded overflow-hidden cursor-pointer">
             <img 
-              src={currentBanner.image?.startsWith('http') ? currentBanner.image : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${currentBanner.image}`} 
+              src={getImageUrl(currentBanner.image) || currentBanner.image} 
               alt={currentBanner.heading}
               className="w-full h-full object-cover"
             />
@@ -169,7 +199,7 @@ const NewHeroSection = () => {
           <div className="h-[246px] flex gap-4">
             <div className="flex-1 relative rounded overflow-hidden cursor-pointer">
               <img 
-                src={bottomLeftBanner?.image ? `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${bottomLeftBanner.image}` : 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=250&fit=crop'} 
+                src={getImageUrl(bottomLeftBanner?.image) || 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=250&fit=crop'} 
                 alt={bottomLeftBanner?.heading || 'Makeup Collection'} 
                 className="w-full h-full object-cover"
               />
@@ -177,7 +207,7 @@ const NewHeroSection = () => {
 
             <div className="flex-1 relative rounded overflow-hidden cursor-pointer">
               <img 
-                src={bottomRightBanner?.image ? `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${bottomRightBanner.image}` : 'https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&h=250&fit=crop'} 
+                src={getImageUrl(bottomRightBanner?.image) || 'https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&h=250&fit=crop'} 
                 alt={bottomRightBanner?.heading || 'Skincare Essentials'} 
                 className="w-full h-full object-cover"
               />
@@ -189,7 +219,7 @@ const NewHeroSection = () => {
         <div className="w-[200px] h-full">
           <div className="relative w-full h-full rounded overflow-hidden cursor-pointer">
             <img 
-              src={rightBanner?.image ? `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${rightBanner.image}` : 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=200&h=500&fit=crop'} 
+              src={getImageUrl(rightBanner?.image) || 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=200&h=500&fit=crop'} 
               alt={rightBanner?.heading || 'Side Banner'} 
               className="w-full h-full object-cover"
             />

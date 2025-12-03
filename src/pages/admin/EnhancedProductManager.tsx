@@ -43,7 +43,24 @@ const EnhancedProductManager = () => {
     isActive: true,
     isFeatured: false,
     isOnSale: false,
-    images: []
+    images: [],
+    metaTitle: '',
+    metaDescription: '',
+    seoKeywords: '',
+    slug: '',
+    h1Tag: '',
+    primaryKeyword: '',
+    focusKeyword: '',
+    altText: '',
+    canonicalUrl: '',
+    seoScore: '0.6',
+    noIndex: false,
+    noFollow: false,
+    enableSchema: true,
+    ogTitle: '',
+    ogDescription: '',
+    twitterTitle: '',
+    twitterDescription: ''
   });
   const [newIngredient, setNewIngredient] = useState('');
   const [newBenefit, setNewBenefit] = useState('');
@@ -108,7 +125,24 @@ const EnhancedProductManager = () => {
         images: formData.images,
         ingredients: formData.ingredients,
         benefits: formData.benefits,
-        variants: formData.variants
+        variants: formData.variants,
+        metaTitle: formData.metaTitle,
+        metaDescription: formData.metaDescription,
+        seoKeywords: formData.seoKeywords ? formData.seoKeywords.split(',').map(k => k.trim()).filter(Boolean) : [],
+        slug: formData.slug,
+        h1Tag: formData.h1Tag,
+        primaryKeyword: formData.primaryKeyword,
+        focusKeyword: formData.focusKeyword,
+        altText: formData.altText ? formData.altText.split(',').map(k => k.trim()).filter(Boolean) : [],
+        canonicalUrl: formData.canonicalUrl,
+        seoScore: parseFloat(formData.seoScore),
+        noIndex: formData.noIndex,
+        noFollow: formData.noFollow,
+        enableSchema: formData.enableSchema,
+        ogTitle: formData.ogTitle,
+        ogDescription: formData.ogDescription,
+        twitterTitle: formData.twitterTitle,
+        twitterDescription: formData.twitterDescription
       };
       
       if (editingProduct) {
@@ -162,7 +196,24 @@ const EnhancedProductManager = () => {
       isActive: product.isActive,
       isFeatured: product.isFeatured,
       isOnSale: product.isOnSale,
-      images: Array.isArray(product.images) ? product.images : []
+      images: Array.isArray(product.images) ? product.images : [],
+      metaTitle: product.metaTitle || '',
+      metaDescription: product.metaDescription || '',
+      seoKeywords: Array.isArray(product.seoKeywords) ? product.seoKeywords.join(', ') : '',
+      slug: product.slug || '',
+      h1Tag: product.h1Tag || '',
+      primaryKeyword: product.primaryKeyword || '',
+      focusKeyword: product.focusKeyword || '',
+      altText: Array.isArray(product.altText) ? product.altText.join(', ') : (product.altText || ''),
+      canonicalUrl: product.canonicalUrl || '',
+      seoScore: product.seoScore?.toString() || '0.6',
+      noIndex: product.noIndex || false,
+      noFollow: product.noFollow || false,
+      enableSchema: product.enableSchema ?? true,
+      ogTitle: product.ogTitle || '',
+      ogDescription: product.ogDescription || '',
+      twitterTitle: product.twitterTitle || '',
+      twitterDescription: product.twitterDescription || ''
     });
     setIsDialogOpen(true);
   };
@@ -208,7 +259,24 @@ const EnhancedProductManager = () => {
       isActive: true,
       isFeatured: false,
       isOnSale: false,
-      images: []
+      images: [],
+      metaTitle: '',
+      metaDescription: '',
+      seoKeywords: '',
+      slug: '',
+      h1Tag: '',
+      primaryKeyword: '',
+      focusKeyword: '',
+      altText: '',
+      canonicalUrl: '',
+      seoScore: '0.6',
+      noIndex: false,
+      noFollow: false,
+      enableSchema: true,
+      ogTitle: '',
+      ogDescription: '',
+      twitterTitle: '',
+      twitterDescription: ''
     });
     setEditingProduct(null);
   };
@@ -769,6 +837,152 @@ const EnhancedProductManager = () => {
                 </CardContent>
               </Card>
 
+              {/* SEO Settings */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">SEO & Schema Settings</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="slug">URL Slug</Label>
+                      <Input
+                        id="slug"
+                        value={formData.slug || ''}
+                        onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+                        placeholder={`${formData.brand?.toLowerCase()}-${formData.name?.toLowerCase()}`.replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-')}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="h1Tag">H1 Tag (Product Name)</Label>
+                      <Input
+                        id="h1Tag"
+                        value={formData.h1Tag || ''}
+                        onChange={(e) => setFormData(prev => ({ ...prev, h1Tag: e.target.value }))}
+                        placeholder={`${formData.name} - ${formData.brand}`}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="metaTitle">SEO Title (≤60 chars)</Label>
+                    <Input
+                      id="metaTitle"
+                      value={formData.metaTitle || ''}
+                      onChange={(e) => setFormData(prev => ({ ...prev, metaTitle: e.target.value }))}
+                      placeholder={`${formData.name} - ${formData.brand} | Elissh Beauty`}
+                      maxLength={60}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">{(formData.metaTitle || '').length}/60</p>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="metaDescription">Meta Description (≤155 chars)</Label>
+                    <Textarea
+                      id="metaDescription"
+                      value={formData.metaDescription || ''}
+                      onChange={(e) => setFormData(prev => ({ ...prev, metaDescription: e.target.value }))}
+                      placeholder={`Shop ${formData.name} by ${formData.brand}. Free shipping in UAE.`}
+                      maxLength={155}
+                      rows={3}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">{(formData.metaDescription || '').length}/155</p>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="primaryKeyword">Primary Keyword</Label>
+                      <Input
+                        id="primaryKeyword"
+                        value={formData.primaryKeyword || ''}
+                        onChange={(e) => setFormData(prev => ({ ...prev, primaryKeyword: e.target.value }))}
+                        placeholder={`${formData.name?.toLowerCase()} ${formData.brand?.toLowerCase()}`}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="focusKeyword">Focus Keyword</Label>
+                      <Input
+                        id="focusKeyword"
+                        value={formData.focusKeyword || ''}
+                        onChange={(e) => setFormData(prev => ({ ...prev, focusKeyword: e.target.value }))}
+                        placeholder="Main SEO target keyword"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="seoKeywords">Secondary Keywords (comma-separated)</Label>
+                    <Input
+                      id="seoKeywords"
+                      value={formData.seoKeywords || ''}
+                      onChange={(e) => setFormData(prev => ({ ...prev, seoKeywords: e.target.value }))}
+                      placeholder={`${formData.brand?.toLowerCase()} cosmetics, ${formData.name?.toLowerCase()} uae, buy ${formData.name?.toLowerCase()}`}
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="altText">Image Alt Text (comma-separated for multiple images)</Label>
+                    <Input
+                      id="altText"
+                      value={formData.altText || ''}
+                      onChange={(e) => setFormData(prev => ({ ...prev, altText: e.target.value }))}
+                      placeholder={`${formData.name} by ${formData.brand}, ${formData.name} product image, ${formData.name} beauty product`}
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="canonicalUrl">Canonical URL</Label>
+                      <Input
+                        id="canonicalUrl"
+                        value={formData.canonicalUrl || ''}
+                        onChange={(e) => setFormData(prev => ({ ...prev, canonicalUrl: e.target.value }))}
+                        placeholder={`https://elissh.com/product/${formData.slug || 'product-slug'}`}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="seoScore">SEO Priority (0.1-1.0)</Label>
+                      <Input
+                        id="seoScore"
+                        type="number"
+                        step="0.1"
+                        min="0.1"
+                        max="1.0"
+                        value={formData.seoScore || '0.6'}
+                        onChange={(e) => setFormData(prev => ({ ...prev, seoScore: e.target.value }))}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="noIndex"
+                        checked={formData.noIndex || false}
+                        onCheckedChange={(checked) => setFormData(prev => ({ ...prev, noIndex: checked }))}
+                      />
+                      <Label htmlFor="noIndex">No Index</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="noFollow"
+                        checked={formData.noFollow || false}
+                        onCheckedChange={(checked) => setFormData(prev => ({ ...prev, noFollow: checked }))}
+                      />
+                      <Label htmlFor="noFollow">No Follow</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="enableSchema"
+                        checked={formData.enableSchema ?? true}
+                        onCheckedChange={(checked) => setFormData(prev => ({ ...prev, enableSchema: checked }))}
+                      />
+                      <Label htmlFor="enableSchema">Enable Schema</Label>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
               {/* Status */}
               <Card>
                 <CardHeader>
@@ -799,6 +1013,62 @@ const EnhancedProductManager = () => {
                         onCheckedChange={(checked) => setFormData(prev => ({ ...prev, isOnSale: checked }))}
                       />
                       <Label htmlFor="isOnSale">On Sale</Label>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* Open Graph & Social */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Open Graph & Social Media</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="ogTitle">OG Title (≤60 chars)</Label>
+                      <Input
+                        id="ogTitle"
+                        value={formData.ogTitle || ''}
+                        onChange={(e) => setFormData(prev => ({ ...prev, ogTitle: e.target.value }))}
+                        placeholder={formData.metaTitle || `${formData.name} - ${formData.brand}`}
+                        maxLength={60}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="twitterTitle">Twitter Title (≤60 chars)</Label>
+                      <Input
+                        id="twitterTitle"
+                        value={formData.twitterTitle || ''}
+                        onChange={(e) => setFormData(prev => ({ ...prev, twitterTitle: e.target.value }))}
+                        placeholder={formData.metaTitle || `${formData.name} - ${formData.brand}`}
+                        maxLength={60}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="ogDescription">OG Description (≤155 chars)</Label>
+                      <Textarea
+                        id="ogDescription"
+                        value={formData.ogDescription || ''}
+                        onChange={(e) => setFormData(prev => ({ ...prev, ogDescription: e.target.value }))}
+                        placeholder={formData.metaDescription || `Shop ${formData.name} by ${formData.brand}. Free shipping in UAE.`}
+                        maxLength={155}
+                        rows={2}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="twitterDescription">Twitter Description (≤155 chars)</Label>
+                      <Textarea
+                        id="twitterDescription"
+                        value={formData.twitterDescription || ''}
+                        onChange={(e) => setFormData(prev => ({ ...prev, twitterDescription: e.target.value }))}
+                        placeholder={formData.metaDescription || `Shop ${formData.name} by ${formData.brand}. Free shipping in UAE.`}
+                        maxLength={155}
+                        rows={2}
+                      />
                     </div>
                   </div>
                 </CardContent>

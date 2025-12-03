@@ -36,6 +36,9 @@ export const admin = (req, res, next) => {
   }
 };
 
+export const auth = protect;
+export const adminAuth = [protect, admin];
+
 export const authorize = (...roles) => {
   return (req, res, next) => {
     if (!req.user) {

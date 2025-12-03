@@ -131,15 +131,68 @@ const Product = sequelize.define('Product', {
   saleEndDate: {
     type: DataTypes.DATE
   },
+  // SEO Fields (comprehensive)
   metaTitle: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING(60)
   },
   metaDescription: {
-    type: DataTypes.TEXT
+    type: DataTypes.STRING(155)
   },
   slug: {
     type: DataTypes.STRING,
     unique: true
+  },
+  h1Tag: {
+    type: DataTypes.STRING
+  },
+  primaryKeyword: {
+    type: DataTypes.STRING
+  },
+  focusKeyword: {
+    type: DataTypes.STRING
+  },
+  seoKeywords: {
+    type: DataTypes.JSON,
+    defaultValue: []
+  },
+  altText: {
+    type: DataTypes.JSON,
+    defaultValue: []
+  },
+  canonicalUrl: {
+    type: DataTypes.STRING
+  },
+  seoScore: {
+    type: DataTypes.DECIMAL(2, 1),
+    defaultValue: 0.6
+  },
+  noIndex: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  noFollow: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  enableSchema: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
+  },
+  ogTitle: {
+    type: DataTypes.STRING(60)
+  },
+  ogDescription: {
+    type: DataTypes.STRING(155)
+  },
+  twitterTitle: {
+    type: DataTypes.STRING(60)
+  },
+  twitterDescription: {
+    type: DataTypes.STRING(155)
+  },
+  structuredData: {
+    type: DataTypes.JSON,
+    defaultValue: {}
   }
 }, {
   timestamps: true,

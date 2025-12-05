@@ -77,7 +77,7 @@ const EnhancedProductManager = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5001/api/products?limit=1000', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/products?limit=1000`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -97,7 +97,7 @@ const EnhancedProductManager = () => {
   const fetchCategories = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5001/api/categories', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/categories`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -354,7 +354,7 @@ const EnhancedProductManager = () => {
     try {
       // Use fetch directly to avoid API client issues
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5001/api/upload/image', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/upload/image`, {
         method: 'POST',
         body: formDataUpload,
         headers: {
@@ -395,7 +395,7 @@ const EnhancedProductManager = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5001/api/upload/images', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/upload/images`, {
         method: 'POST',
         body: formDataUpload,
         headers: {
@@ -779,7 +779,7 @@ const EnhancedProductManager = () => {
                       <div className="mt-2">
                         <div className="w-32 h-32 border rounded-lg overflow-hidden bg-gray-50">
                           <img 
-                            src={`http://localhost:5001${formData.images[0]}`}
+                            src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://elissh.com'}${formData.images[0]}`}
                             alt="Main product" 
                             className="w-full h-full object-cover"
                             onLoad={() => console.log('Image loaded successfully:', formData.images[0])}
@@ -813,7 +813,7 @@ const EnhancedProductManager = () => {
                           {formData.images.slice(1).map((img, index) => (
                             <div key={index} className="relative">
                               <img 
-                                src={img.startsWith('http') ? img : `http://localhost:5001${img}`} 
+                                src={img.startsWith('http') ? img : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://elissh.com'}${img}`} 
                                 alt={`Gallery ${index + 1}`} 
                                 className="w-20 h-20 object-cover rounded-lg border"
                                 onError={(e) => {
@@ -1128,7 +1128,7 @@ const EnhancedProductManager = () => {
                 <div className="aspect-square bg-gray-100 flex items-center justify-center relative">
                   {product.images && Array.isArray(product.images) && product.images.length > 0 ? (
                     <img 
-                      src={`http://localhost:5001${product.images[0]}`}
+                      src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://elissh.com'}${product.images[0]}`}
                       alt={product.name}
                       className="w-full h-full object-cover"
                       onLoad={() => console.log('Admin card image loaded:', product.images[0])}

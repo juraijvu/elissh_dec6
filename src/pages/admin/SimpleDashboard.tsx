@@ -37,7 +37,7 @@ const SimpleDashboard: React.FC = () => {
       setLoading(true);
       const token = localStorage.getItem('token');
       
-      const response = await fetch('http://localhost:5001/api/admin/dashboard', {
+      const response = await fetch('${import.meta.env.VITE_API_URL}/admin/dashboard', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

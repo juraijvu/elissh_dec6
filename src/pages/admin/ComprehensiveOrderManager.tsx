@@ -27,7 +27,7 @@ const ComprehensiveOrderManager = () => {
       setLoading(true);
       const token = localStorage.getItem('token');
       const queryParams = statusFilter !== 'all' ? `?status=${statusFilter}` : '';
-      const response = await fetch(`http://localhost:5001/api/orders${queryParams}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/orders${queryParams}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -93,7 +93,7 @@ const ComprehensiveOrderManager = () => {
       const order = orders.find(o => o.id === orderId);
       if (!order) return;
       
-      const response = await fetch(`http://localhost:5001/api/orders/${order.orderId}/status`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/orders/${order.orderId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

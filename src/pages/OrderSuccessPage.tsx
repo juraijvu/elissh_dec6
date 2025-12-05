@@ -27,7 +27,7 @@ const OrderSuccessPage = () => {
       // If coming from mock payment success, update order status first
       if (orderId && paymentSuccess === 'success') {
         try {
-          await fetch(`http://localhost:5001/api/orders/${orderId}/payment-success`, {
+          await fetch(`${import.meta.env.VITE_API_URL}/orders/${orderId}/payment-success`, {
             method: 'PUT',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -40,7 +40,7 @@ const OrderSuccessPage = () => {
         }
       }
       
-      const response = await fetch(`http://localhost:5001/api/orders/my-orders`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/orders/my-orders`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

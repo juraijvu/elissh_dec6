@@ -157,7 +157,7 @@ const DynamicProductDetailPage = () => {
     },
     "description": product.description,
     "sku": product.sku,
-    "image": product.images?.map(img => `http://localhost:5001${img}`) || [],
+    "image": product.images?.map(img => `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://elissh.com'}${img}`) || [],
     "offers": {
       "@type": "Offer",
       "price": product.price,
@@ -187,7 +187,7 @@ const DynamicProductDetailPage = () => {
         description={seoDescription}
         keywords={seoKeywords}
         canonicalUrl={canonicalUrl}
-        ogImage={product.images?.[0] ? `http://localhost:5001${product.images[0]}` : undefined}
+        ogImage={product.images?.[0] ? `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://elissh.com'}${product.images[0]}` : undefined}
         ogType="product"
         structuredData={structuredData}
       />
@@ -204,7 +204,7 @@ const DynamicProductDetailPage = () => {
             <div className="relative rounded-2xl overflow-hidden shadow-elevated mb-4 aspect-square bg-gray-100 flex items-center justify-center">
               {product.images && Array.isArray(product.images) && product.images.length > 0 ? (
                 <img
-                  src={`http://localhost:5001${product.images[selectedImage]}`}
+                  src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://elissh.com'}${product.images[selectedImage]}`}
                   alt={product.name}
                   className="w-full h-full object-cover"
                   onLoad={() => console.log('Product image loaded:', product.images[selectedImage])}
@@ -231,7 +231,7 @@ const DynamicProductDetailPage = () => {
                     }`}
                   >
                     <img 
-                      src={img.startsWith('http') ? img : `http://localhost:5001${img}`} 
+                      src={img.startsWith('http') ? img : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://elissh.com'}${img}`} 
                       alt={`View ${i + 1}`} 
                       className="w-full aspect-square object-cover"
                       onError={(e) => {

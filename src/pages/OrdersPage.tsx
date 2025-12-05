@@ -24,7 +24,7 @@ const OrdersPage = () => {
   const fetchOrders = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5001/api/orders/my-orders', {
+      const response = await fetch('${import.meta.env.VITE_API_URL}/orders/my-orders', {
         headers: {
           'Authorization': `Bearer ${token}`
         }

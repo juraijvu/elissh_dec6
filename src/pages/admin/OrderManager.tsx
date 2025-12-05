@@ -29,7 +29,7 @@ const OrderManager = () => {
     try {
       const token = localStorage.getItem('token');
       const queryParams = statusFilter ? `?status=${statusFilter}` : '';
-      const response = await fetch(`http://localhost:5001/api/orders${queryParams}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/orders${queryParams}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -49,7 +49,7 @@ const OrderManager = () => {
     
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5001/api/orders/${selectedOrder.id}/status`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/orders/${selectedOrder.id}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

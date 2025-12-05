@@ -167,7 +167,7 @@ const BannerManager = () => {
       for (const area of areas) {
         try {
           console.log(`Loading banners for area: ${area}`);
-          const response = await fetch(`http://localhost:5001/api/banner/${area}`, {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/banner/${area}`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -226,7 +226,7 @@ const BannerManager = () => {
       let response;
       if (editingBanner) {
         console.log('Updating banner with ID:', editingBanner.id);
-        response = await fetch(`http://localhost:5001/api/banner/${editingBanner.id}/json`, {
+        response = await fetch(`${import.meta.env.VITE_API_URL}/banner/${editingBanner.id}/json`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -236,7 +236,7 @@ const BannerManager = () => {
         });
       } else {
         console.log('Creating new banner');
-        response = await fetch('http://localhost:5001/api/banner/json', {
+        response = await fetch(`${import.meta.env.VITE_API_URL}/banner/json`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -297,7 +297,7 @@ const BannerManager = () => {
     
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5001/api/banner/${bannerId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/banner/${bannerId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -550,7 +550,7 @@ const BannerManager = () => {
                     ) : editingBanner?.image ? (
                       <div className="space-y-2">
                         <img 
-                          src={editingBanner.image.startsWith('http') ? editingBanner.image : `http://localhost:5001${editingBanner.image}`} 
+                          src={editingBanner.image.startsWith('http') ? editingBanner.image : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://elissh.com'}${editingBanner.image}`} 
                           alt="Current" 
                           className="w-full h-32 object-cover rounded"
                         />
@@ -589,7 +589,7 @@ const BannerManager = () => {
                     ) : editingBanner?.mobileImage ? (
                       <div className="space-y-2">
                         <img 
-                          src={editingBanner.mobileImage.startsWith('http') ? editingBanner.mobileImage : `http://localhost:5001${editingBanner.mobileImage}`} 
+                          src={editingBanner.mobileImage.startsWith('http') ? editingBanner.mobileImage : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://elissh.com'}${editingBanner.mobileImage}`} 
                           alt="Current Mobile" 
                           className="w-full h-32 object-cover rounded"
                         />
@@ -637,7 +637,7 @@ const BannerManager = () => {
                     className="mt-2"
                     onClick={async () => {
                       const token = localStorage.getItem('token');
-                      const response = await fetch(`http://localhost:5001/api/banner/test/${editingBanner.id}`, {
+                      const response = await fetch(`${import.meta.env.VITE_API_URL}/banner/test/${editingBanner.id}`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                       });
                       const data = await response.json();
@@ -779,7 +779,7 @@ const BannerManager = () => {
                           {banner.image && (
                             <div className="relative">
                               <img 
-                                src={banner.image.startsWith('http') ? banner.image : `http://localhost:5001${banner.image}`} 
+                                src={banner.image.startsWith('http') ? banner.image : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://elissh.com'}${banner.image}`} 
                                 alt={banner.name}
                                 className="w-20 h-16 object-cover rounded border"
                                 onError={(e) => {

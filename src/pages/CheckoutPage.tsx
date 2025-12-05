@@ -33,7 +33,7 @@ const CheckoutPage = () => {
           return;
         }
 
-        const response = await fetch('http://localhost:5001/api/cart', {
+        const response = await fetch('${import.meta.env.VITE_API_URL}/cart', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -96,7 +96,7 @@ const CheckoutPage = () => {
       };
 
       // Create order first
-      const response = await fetch('http://localhost:5001/api/orders', {
+      const response = await fetch('${import.meta.env.VITE_API_URL}/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ const CheckoutPage = () => {
         // Handle different payment methods
         if (paymentMethod === 'vault') {
           // Create Vault payment
-          const paymentResponse = await fetch('http://localhost:5001/api/payments/vault/create', {
+          const paymentResponse = await fetch('${import.meta.env.VITE_API_URL}/payments/vault/create', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

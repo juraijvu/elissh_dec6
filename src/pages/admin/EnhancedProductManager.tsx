@@ -77,7 +77,7 @@ const EnhancedProductManager = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5001/api/products', {
+      const response = await fetch('http://localhost:5001/api/products?limit=1000', {
         headers: {
           'Authorization': `Bearer ${token}`
         }

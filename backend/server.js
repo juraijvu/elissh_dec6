@@ -26,7 +26,7 @@ import sitemapRoutes from './routes/sitemap.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || ;
+const PORT = process.env.PORT || 5000;
 
 // Security middleware
 app.use(helmet({
@@ -34,14 +34,16 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "http://localhost:5173", "http://localhost:5000"],
+      imgSrc: ["'self'", "data:", "http://localhost:5173", "http://localhost:5000", "https://elissh.com"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       scriptSrc: ["'self'"]
     }
   }
 }));
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5000', 'http://elissh.com', 'https://elissh.com'],
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://elissh.com', 'http://elissh.com']
+    : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', 'Cache-Control']

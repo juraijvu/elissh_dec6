@@ -16,6 +16,7 @@
     "add-sample-data": "node scripts/addSampleData.js",
     "seed-products": "node scripts/seedCosmeticProducts.js",
     "seed-banners": "node scripts/seedComprehensiveBanners.js",
+    "seed-new-arrivals": "node scripts/seedNewArrivalBanners.js",
     "create-admin": "node scripts/createAdmin.js"
   },
   "dependencies": {

@@ -13,6 +13,8 @@ import { cartAPI, wishlistAPI, productsAPI } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import SEOHead from "@/components/SEOHead";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import ReviewsSection from "@/components/ReviewsSection";
+import UserGallerySection from "@/components/UserGallerySection";
 
 const DynamicProductDetailPage = () => {
   const { id } = useParams();
@@ -278,10 +280,10 @@ const DynamicProductDetailPage = () => {
             <div className="flex items-center gap-4 mb-6">
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className={`h-5 w-5 ${i < Math.floor(product.rating?.average || 0) ? 'fill-primary text-primary' : 'text-gray-300'}`} />
+                  <Star key={i} className={`h-5 w-5 ${i < Math.floor(product.avgRating || product.rating?.average || 0) ? 'fill-primary text-primary' : 'text-gray-300'}`} />
                 ))}
               </div>
-              <span className="text-muted-foreground">{product.rating?.average || 0} ({product.rating?.count || 0} reviews)</span>
+              <span className="text-muted-foreground">{product.avgRating || product.rating?.average || 0} ({product.reviewCount || product.rating?.count || 0} reviews)</span>
             </div>
 
             <div className="flex items-baseline gap-4 mb-4">
@@ -442,11 +444,13 @@ const DynamicProductDetailPage = () => {
         <Card className="mb-16">
           <Tabs defaultValue="description" className="w-full">
             <CardHeader>
-              <TabsList className="grid w-full grid-cols-4">
+              <TabsList className="grid w-full grid-cols-6">
                 <TabsTrigger value="description">Description</TabsTrigger>
                 <TabsTrigger value="ingredients">Ingredients</TabsTrigger>
                 <TabsTrigger value="howto">How to Use</TabsTrigger>
                 <TabsTrigger value="benefits">Benefits</TabsTrigger>
+                <TabsTrigger value="reviews">Reviews</TabsTrigger>
+                <TabsTrigger value="gallery">Gallery</TabsTrigger>
               </TabsList>
             </CardHeader>
             <CardContent>
@@ -507,6 +511,14 @@ const DynamicProductDetailPage = () => {
                 ) : (
                   <p className="text-muted-foreground">No benefits information available.</p>
                 )}
+              </TabsContent>
+              
+              <TabsContent value="reviews" className="space-y-6">
+                <ReviewsSection productId={id!} />
+              </TabsContent>
+              
+              <TabsContent value="gallery" className="space-y-6">
+                <UserGallerySection productId={id!} />
               </TabsContent>
             </CardContent>
           </Tabs>

@@ -147,6 +147,13 @@ const NewHeroSection = () => {
               alt={bottomLeftBanner?.heading || 'Makeup Collection'} 
               className="w-full h-full object-cover"
             />
+            {bottomLeftBanner && (
+              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                <div className="text-center text-white px-2">
+                  <h4 className="text-sm font-bold">{bottomLeftBanner.heading}</h4>
+                </div>
+              </div>
+            )}
           </div>
           <div className="h-[120px] sm:h-[140px] relative rounded-lg overflow-hidden cursor-pointer">
             <img 
@@ -154,6 +161,13 @@ const NewHeroSection = () => {
               alt={bottomRightBanner?.heading || 'Skincare Essentials'} 
               className="w-full h-full object-cover"
             />
+            {bottomRightBanner && (
+              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                <div className="text-center text-white px-2">
+                  <h4 className="text-sm font-bold">{bottomRightBanner.heading}</h4>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -174,20 +188,35 @@ const NewHeroSection = () => {
         {/* Central Area */}
         <div className="flex-1 h-full flex flex-col gap-4">
           {/* Top Hero Banner Area */}
-          <div className="h-[250px] relative rounded overflow-hidden cursor-pointer">
+          <div className="h-[250px] relative rounded overflow-hidden cursor-pointer group">
             <img 
               src={getImageUrl(currentBanner.image) || currentBanner.image} 
               alt={currentBanner.heading}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+            <div 
+              className="absolute inset-0 flex items-center justify-center"
+              style={{
+                background: currentBanner.overlayColor ? `${currentBanner.overlayColor}${Math.round((currentBanner.overlayOpacity || 0.3) * 255).toString(16).padStart(2, '0')}` : 'rgba(0,0,0,0.3)'
+              }}
+            >
               <div className="text-center text-white">
-                <h2 className="text-2xl lg:text-3xl font-bold mb-2">{currentBanner.heading}</h2>
+                <h2 
+                  className="text-2xl lg:text-3xl font-bold mb-2"
+                  style={{ color: currentBanner.textColor || '#ffffff' }}
+                >
+                  {currentBanner.heading}
+                </h2>
                 {currentBanner.subHeading && (
-                  <p className="text-lg mb-4">{currentBanner.subHeading}</p>
+                  <p 
+                    className="text-lg mb-4"
+                    style={{ color: currentBanner.textColor || '#ffffff' }}
+                  >
+                    {currentBanner.subHeading}
+                  </p>
                 )}
                 {currentBanner.buttonText && (
-                  <button className="bg-white text-black px-6 py-3 rounded font-semibold">
+                  <button className="px-6 py-3 bg-primary text-primary-foreground rounded font-semibold hover:bg-primary/90 transition-colors">
                     {currentBanner.buttonText}
                   </button>
                 )}
@@ -197,20 +226,50 @@ const NewHeroSection = () => {
 
           {/* Two Horizontal Banners */}
           <div className="h-[246px] flex gap-4">
-            <div className="flex-1 relative rounded overflow-hidden cursor-pointer">
+            <div className="flex-1 relative rounded overflow-hidden cursor-pointer group">
               <img 
                 src={getImageUrl(bottomLeftBanner?.image) || 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=250&fit=crop'} 
                 alt={bottomLeftBanner?.heading || 'Makeup Collection'} 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
+              {bottomLeftBanner && (
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-start px-6">
+                  <div className="text-left text-white">
+                    <h3 className="text-xl font-bold mb-2">{bottomLeftBanner.heading}</h3>
+                    {bottomLeftBanner.subHeading && (
+                      <p className="text-sm mb-3">{bottomLeftBanner.subHeading}</p>
+                    )}
+                    {bottomLeftBanner.buttonText && (
+                      <button className="px-4 py-2 bg-primary text-primary-foreground rounded font-semibold hover:bg-primary/90 transition-colors">
+                        {bottomLeftBanner.buttonText}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
-            <div className="flex-1 relative rounded overflow-hidden cursor-pointer">
+            <div className="flex-1 relative rounded overflow-hidden cursor-pointer group">
               <img 
                 src={getImageUrl(bottomRightBanner?.image) || 'https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&h=250&fit=crop'} 
                 alt={bottomRightBanner?.heading || 'Skincare Essentials'} 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
+              {bottomRightBanner && (
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-end px-6">
+                  <div className="text-right text-white">
+                    <h3 className="text-xl font-bold mb-2">{bottomRightBanner.heading}</h3>
+                    {bottomRightBanner.subHeading && (
+                      <p className="text-sm mb-3">{bottomRightBanner.subHeading}</p>
+                    )}
+                    {bottomRightBanner.buttonText && (
+                      <button className="px-4 py-2 bg-primary text-primary-foreground rounded font-semibold hover:bg-primary/90 transition-colors">
+                        {bottomRightBanner.buttonText}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -95,6 +95,14 @@ const Product = sequelize.define('Product', {
     type: DataTypes.JSON,
     defaultValue: { average: 0, count: 0 }
   },
+  avgRating: {
+    type: DataTypes.DECIMAL(2, 1),
+    defaultValue: 0
+  },
+  reviewCount: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0
+  },
   deliveryDays: {
     type: DataTypes.INTEGER,
     defaultValue: 3

@@ -36,6 +36,7 @@ import PaymentSettings from "./pages/admin/PaymentSettings";
 import SEOManager from "./pages/admin/SEOManager";
 import BlogManager from "./pages/admin/BlogManager";
 import UserManager from "./pages/admin/UserManager";
+import ReviewsManager from "./pages/admin/ReviewsManager";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 import MockPayment from "./pages/MockPayment";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -77,6 +78,7 @@ const App = () => (
               <Route path="products" element={<EnhancedProductManager />} />
               <Route path="categories" element={<CategoryManager />} />
               <Route path="orders" element={<ComprehensiveOrderManager />} />
+              <Route path="reviews" element={<ReviewsManager />} />
               <Route path="banners" element={<BannerManager />} />
               <Route path="payments" element={<PaymentSettings />} />
               <Route path="seo" element={<SEOManager />} />

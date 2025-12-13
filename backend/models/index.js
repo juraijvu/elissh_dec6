@@ -8,6 +8,8 @@ import Cart from './Cart.js';
 import Wishlist from './Wishlist.js';
 import PaymentSettings from './PaymentSettings.js';
 import SEO from './SEO.js';
+import Review from './Review.js';
+import UserGallery from './UserGallery.js';
 
 // Set up associations
 Product.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });
@@ -40,4 +42,18 @@ Category.hasOne(SEO, {
 SEO.belongsTo(Product, { foreignKey: 'entityId', constraints: false });
 SEO.belongsTo(Category, { foreignKey: 'entityId', constraints: false });
 
-export { Product, Category, Banner, User, Order, Wallet, Cart, Wishlist, PaymentSettings, SEO };
+// Review associations
+User.hasMany(Review, { foreignKey: 'userId' });
+Review.belongsTo(User, { foreignKey: 'userId' });
+
+Product.hasMany(Review, { foreignKey: 'productId' });
+Review.belongsTo(Product, { foreignKey: 'productId' });
+
+// UserGallery associations
+User.hasMany(UserGallery, { foreignKey: 'userId' });
+UserGallery.belongsTo(User, { foreignKey: 'userId' });
+
+Product.hasMany(UserGallery, { foreignKey: 'productId' });
+UserGallery.belongsTo(Product, { foreignKey: 'productId' });
+
+export { Product, Category, Banner, User, Order, Wallet, Cart, Wishlist, PaymentSettings, SEO, Review, UserGallery };

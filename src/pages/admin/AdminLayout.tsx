@@ -13,7 +13,8 @@ import {
   LogOut,
   Home,
   CreditCard,
-  Search
+  Search,
+  MessageSquare
 } from 'lucide-react';
 
 const AdminLayout = () => {
@@ -26,6 +27,7 @@ const AdminLayout = () => {
     { name: 'Products', href: '/admin/products', icon: Package },
     { name: 'Categories', href: '/admin/categories', icon: Settings },
     { name: 'Orders', href: '/admin/orders', icon: ShoppingCart },
+    { name: 'Reviews & Gallery', href: '/admin/reviews', icon: MessageSquare },
     { name: 'Banners', href: '/admin/banners', icon: Settings },
     { name: 'Payment Settings', href: '/admin/payments', icon: CreditCard },
     { name: 'SEO Management', href: '/admin/seo', icon: Settings },

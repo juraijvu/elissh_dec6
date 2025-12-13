@@ -250,6 +250,72 @@ export const seoAPI = {
   }
 };
 
+export const reviewsAPI = {
+  createReview: async (formData: FormData) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_BASE}/reviews`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      throw { response: { data: error } };
+    }
+    return await response.json();
+  },
+  getProductReviews: async (productId: string) => {
+    const response = await fetch(`${API_BASE}/reviews/product/${productId}`);
+    if (!response.ok) throw new Error('Failed to fetch reviews');
+    return await response.json();
+  },
+  uploadGalleryImage: async (formData: FormData) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_BASE}/reviews/gallery`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      throw { response: { data: error } };
+    }
+    return await response.json();
+  },
+  getProductGallery: async (productId: string) => {
+    const response = await fetch(`${API_BASE}/reviews/gallery/${productId}`);
+    if (!response.ok) throw new Error('Failed to fetch gallery');
+    return await response.json();
+  },
+  // Admin endpoints
+  getPendingReviews: async () => {
+    const response = await apiCall('/reviews/admin/pending');
+    return await response.json();
+  },
+  getPendingGallery: async () => {
+    const response = await apiCall('/reviews/admin/gallery/pending');
+    return await response.json();
+  },
+  approveReview: async (id: number, data: { isApproved: boolean; adminNotes?: string }) => {
+    const response = await apiCall(`/reviews/admin/${id}/approve`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+    return await response.json();
+  },
+  approveGalleryImage: async (id: number, data: { isApproved: boolean; adminNotes?: string }) => {
+    const response = await apiCall(`/reviews/admin/gallery/${id}/approve`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+    return await response.json();
+  }
+};
+
 const api = {
   apiCall,
   authAPI,
@@ -259,6 +325,7 @@ const api = {
   cartAPI,
   wishlistAPI,
   seoAPI,
+  reviewsAPI,
   
   // HTTP methods
   get: async (endpoint: string) => {

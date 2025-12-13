@@ -225,13 +225,6 @@ const Index = () => {
             aspectRatio="aspect-[3/4]" 
             fallbackImage={fragranceImage}
           />
-          <DynamicBanner 
-            area="new-arrival-banner" 
-            bannerIndex={7}
-            className="w-full" 
-            aspectRatio="aspect-[3/4]" 
-            fallbackImage={haircareImage}
-          />
         </div>
       </section>
 

@@ -49,6 +49,10 @@ const Review = sequelize.define('Review', {
   isApproved: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
+  },
+  adminNotes: {
+    type: DataTypes.TEXT,
+    allowNull: true
   }
 }, {
   timestamps: true,

@@ -104,7 +104,7 @@ const NewHeroSection = () => {
             alt={currentBanner.heading}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+          <div className="absolute inset-0  flex items-center justify-center">
             <div className="text-center text-white">
               <h2 className="text-lg sm:text-xl font-bold mb-1">{currentBanner.heading}</h2>
               {currentBanner.subHeading && (
@@ -148,7 +148,7 @@ const NewHeroSection = () => {
               className="w-full h-full object-cover"
             />
             {bottomLeftBanner && (
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+              <div className="absolute inset-0  flex items-center justify-center">
                 <div className="text-center text-white px-2">
                   <h4 className="text-sm font-bold">{bottomLeftBanner.heading}</h4>
                 </div>
@@ -162,7 +162,7 @@ const NewHeroSection = () => {
               className="w-full h-full object-cover"
             />
             {bottomRightBanner && (
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+              <div className="absolute inset-0  flex items-center justify-center">
                 <div className="text-center text-white px-2">
                   <h4 className="text-sm font-bold">{bottomRightBanner.heading}</h4>
                 </div>
@@ -196,9 +196,7 @@ const NewHeroSection = () => {
             />
             <div 
               className="absolute inset-0 flex items-center justify-center"
-              style={{
-                background: currentBanner.overlayColor ? `${currentBanner.overlayColor}${Math.round((currentBanner.overlayOpacity || 0.3) * 255).toString(16).padStart(2, '0')}` : 'rgba(0,0,0,0.3)'
-              }}
+
             >
               <div className="text-center text-white">
                 <h2 
@@ -233,7 +231,7 @@ const NewHeroSection = () => {
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
               {bottomLeftBanner && (
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-start px-6">
+                <div className="absolute inset-0  flex items-center justify-start px-6">
                   <div className="text-left text-white">
                     <h3 className="text-xl font-bold mb-2">{bottomLeftBanner.heading}</h3>
                     {bottomLeftBanner.subHeading && (
@@ -256,7 +254,7 @@ const NewHeroSection = () => {
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
               {bottomRightBanner && (
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-end px-6">
+                <div className="absolute inset-0  flex items-center justify-end px-6">
                   <div className="text-right text-white">
                     <h3 className="text-xl font-bold mb-2">{bottomRightBanner.heading}</h3>
                     {bottomRightBanner.subHeading && (

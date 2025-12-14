@@ -250,7 +250,7 @@ export const Header = () => {
       {/* Category Popup Modal */}
       {showCategoryPopup && (
         <div 
-          className="lg:hidden fixed inset-0 z-[60] bg-black/30 flex items-center justify-center p-4"
+          className="lg:hidden fixed inset-0 z-[60]  flex items-center justify-center p-4"
           onClick={() => setShowCategoryPopup(false)}
         >
           <div 

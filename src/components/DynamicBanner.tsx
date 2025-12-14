@@ -78,7 +78,7 @@ const DynamicBanner = ({ area, className = '', fallbackImage, aspectRatio = 'asp
           alt="Banner" 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white">
             <h3 className="text-xl font-bold mb-2">Coming Soon</h3>
             <p className="text-sm opacity-90">New content will be available here</p>

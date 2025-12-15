@@ -16,7 +16,7 @@ const DynamicBanner = ({ area, className = '', fallbackImage, aspectRatio = 'asp
   const getImageUrl = (image) => {
     if (!image) return null;
     if (image.startsWith('http')) return image;
-    const baseUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:';
+    const baseUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://elissh.com';
     return `${baseUrl}${image}`;
   };
 

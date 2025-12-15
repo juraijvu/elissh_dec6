@@ -95,23 +95,23 @@ const NewHeroSection = () => {
   return (
     <section className="container mx-auto px-4 py-4 lg:py-8">
       {/* Mobile Layout */}
-      <div className="lg:hidden space-y-4">
+      <div className="lg:hidden space-y-3">
         {/* Main Hero Banner - Full Width on Mobile */}
-        <div className="h-[200px] sm:h-[250px] relative rounded-lg overflow-hidden cursor-pointer">
+        <div className="relative rounded-lg overflow-hidden cursor-pointer">
           <img 
             key={`hero-mobile-${refreshKey}-${currentBanner.id || 'fallback'}`}
             src={getImageUrl(currentBanner.image) || currentBanner.image} 
             alt={currentBanner.heading}
-            className="w-full h-full object-cover"
+            className="w-full h-auto object-contain"
           />
-          <div className="absolute inset-0  flex items-center justify-center">
-            <div className="text-center text-white">
-              <h2 className="text-lg sm:text-xl font-bold mb-1">{currentBanner.heading}</h2>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center text-white px-4">
+              <h2 className="text-lg font-bold mb-1">{currentBanner.heading}</h2>
               {currentBanner.subHeading && (
-                <p className="text-sm mb-2">{currentBanner.subHeading}</p>
+                <p className="text-xs mb-2">{currentBanner.subHeading}</p>
               )}
               {currentBanner.buttonText && (
-                <button className="bg-white text-black px-4 py-2 rounded text-sm font-semibold">
+                <button className="bg-white text-black px-3 py-1 rounded text-xs font-semibold">
                   {currentBanner.buttonText}
                 </button>
               )}
@@ -119,52 +119,69 @@ const NewHeroSection = () => {
           </div>
         </div>
 
-        {/* Side Banners - Horizontal on Mobile */}
-        <div className="grid grid-cols-2 gap-3 h-[120px] sm:h-[140px]">
-          <div className="relative rounded-lg overflow-hidden cursor-pointer">
+        {/* All 4 Side Banners in 2x2 Grid on Mobile */}
+        <div className="grid grid-cols-2 gap-2">
+          {/* Left Banner */}
+          <div className=" relative rounded-lg overflow-hidden cursor-pointer bg-gray-100">
             <img 
               key={`left-mobile-${refreshKey}-${leftBanner?.id || 'fallback'}`}
-              src={getImageUrl(leftBanner?.image) || 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=200&h=140&fit=crop'} 
+              src={getImageUrl(leftBanner?.image) || 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=200&h=100&fit=crop'} 
               alt={leftBanner?.heading || 'Side Banner'} 
-              className="w-full h-full object-cover"
+              className="w-full h-auto object-contain"
             />
-          </div>
-          <div className="relative rounded-lg overflow-hidden cursor-pointer">
-            <img 
-              key={`right-mobile-${refreshKey}-${rightBanner?.id || 'fallback'}`}
-              src={getImageUrl(rightBanner?.image) || 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=200&h=140&fit=crop'} 
-              alt={rightBanner?.heading || 'Side Banner'} 
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-
-        {/* Bottom Banners - Stacked on Mobile */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 h-auto">
-          <div className="h-[120px] sm:h-[140px] relative rounded-lg overflow-hidden cursor-pointer">
-            <img 
-              src={getImageUrl(bottomLeftBanner?.image) || 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=140&fit=crop'} 
-              alt={bottomLeftBanner?.heading || 'Makeup Collection'} 
-              className="w-full h-full object-cover"
-            />
-            {bottomLeftBanner && (
+            {leftBanner && (
               <div className="absolute inset-0  flex items-center justify-center">
-                <div className="text-center text-white px-2">
-                  <h4 className="text-sm font-bold">{bottomLeftBanner.heading}</h4>
+                <div className="text-center text-white px-1">
+                  <h4 className="text-xs font-bold">{leftBanner.heading}</h4>
                 </div>
               </div>
             )}
           </div>
-          <div className="h-[120px] sm:h-[140px] relative rounded-lg overflow-hidden cursor-pointer">
+          
+          {/* Right Banner */}
+          <div className=" relative rounded-lg overflow-hidden cursor-pointer bg-gray-100">
             <img 
-              src={getImageUrl(bottomRightBanner?.image) || 'https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&h=140&fit=crop'} 
+              key={`right-mobile-${refreshKey}-${rightBanner?.id || 'fallback'}`}
+              src={getImageUrl(rightBanner?.image) || 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=200&h=100&fit=crop'} 
+              alt={rightBanner?.heading || 'Side Banner'} 
+              className="w-full h-auto object-contain"
+            />
+            {rightBanner && (
+              <div className="absolute inset-0  flex items-center justify-center">
+                <div className="text-center text-white px-1">
+                  <h4 className="text-xs font-bold">{rightBanner.heading}</h4>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          {/* Bottom Left Banner */}
+          <div className=" relative rounded-lg overflow-hidden cursor-pointer bg-gray-100">
+            <img 
+              src={getImageUrl(bottomLeftBanner?.image) || 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=100&fit=crop'} 
+              alt={bottomLeftBanner?.heading || 'Makeup Collection'} 
+              className="w-full h-auto object-contain"
+            />
+            {bottomLeftBanner && (
+              <div className="absolute inset-0  flex items-center justify-center">
+                <div className="text-center text-white px-1">
+                  <h4 className="text-xs font-bold">{bottomLeftBanner.heading}</h4>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          {/* Bottom Right Banner */}
+          <div className=" relative rounded-lg overflow-hidden cursor-pointer bg-gray-100">
+            <img 
+              src={getImageUrl(bottomRightBanner?.image) || 'https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=200&h=100&fit=crop'} 
               alt={bottomRightBanner?.heading || 'Skincare Essentials'} 
-              className="w-full h-full object-cover"
+              className="w-full h-auto object-contain"
             />
             {bottomRightBanner && (
               <div className="absolute inset-0  flex items-center justify-center">
-                <div className="text-center text-white px-2">
-                  <h4 className="text-sm font-bold">{bottomRightBanner.heading}</h4>
+                <div className="text-center text-white px-1">
+                  <h4 className="text-xs font-bold">{bottomRightBanner.heading}</h4>
                 </div>
               </div>
             )}

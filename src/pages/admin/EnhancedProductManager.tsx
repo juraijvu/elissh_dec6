@@ -462,55 +462,65 @@ const EnhancedProductManager = () => {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="name">Product Name *</Label>
+                      <Label htmlFor="name">Product Name * (≤100 chars)</Label>
                       <Input
                         id="name"
                         value={formData.name}
-                        onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                        onChange={(e) => e.target.value.length <= 100 && setFormData(prev => ({ ...prev, name: e.target.value }))}
+                        maxLength={100}
                         required
                       />
+                      <p className="text-xs text-muted-foreground mt-1">{formData.name.length}/100</p>
                     </div>
                     <div>
-                      <Label htmlFor="brand">Brand *</Label>
+                      <Label htmlFor="brand">Brand * (≤50 chars)</Label>
                       <Input
                         id="brand"
                         value={formData.brand}
-                        onChange={(e) => setFormData(prev => ({ ...prev, brand: e.target.value }))}
+                        onChange={(e) => e.target.value.length <= 50 && setFormData(prev => ({ ...prev, brand: e.target.value }))}
+                        maxLength={50}
                         required
                       />
+                      <p className="text-xs text-muted-foreground mt-1">{formData.brand.length}/50</p>
                     </div>
                   </div>
 
                   <div>
-                    <Label htmlFor="shortDescription">Short Description</Label>
+                    <Label htmlFor="shortDescription">Short Description (≤200 chars)</Label>
                     <Input
                       id="shortDescription"
                       value={formData.shortDescription}
-                      onChange={(e) => setFormData(prev => ({ ...prev, shortDescription: e.target.value }))}
+                      onChange={(e) => e.target.value.length <= 200 && setFormData(prev => ({ ...prev, shortDescription: e.target.value }))}
+                      maxLength={200}
                       placeholder="Brief product description"
                     />
+                    <p className="text-xs text-muted-foreground mt-1">{formData.shortDescription.length}/200</p>
                   </div>
 
                   <div>
-                    <Label htmlFor="description">Full Description *</Label>
+                    <Label htmlFor="description">Full Description * (≤2000 chars)</Label>
                     <Textarea
                       id="description"
                       rows={4}
                       value={formData.description}
-                      onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                      onChange={(e) => e.target.value.length <= 2000 && setFormData(prev => ({ ...prev, description: e.target.value }))}
+                      maxLength={2000}
                       required
                     />
+                    <p className="text-xs text-muted-foreground mt-1">{formData.description.length}/2000</p>
                   </div>
 
                   <div>
-                    <Label htmlFor="howToUse">How to Use</Label>
+                    <Label htmlFor="howToUse">How to Use (≤1000 chars)</Label>
                     <Textarea
                       id="howToUse"
                       rows={3}
                       value={formData.howToUse}
-                      onChange={(e) => setFormData(prev => ({ ...prev, howToUse: e.target.value }))}
+                      onChange={(e) => e.target.value.length <= 1000 && setFormData(prev => ({ ...prev, howToUse: e.target.value }))}
+                      maxLength={1000}
                       placeholder="Instructions for product usage"
                     />
+                    <p className="text-xs text-muted-foreground mt-1">{formData.howToUse.length}/1000</p>
                   </div>
                 </CardContent>
               </Card>
@@ -536,13 +546,15 @@ const EnhancedProductManager = () => {
                       </Select>
                     </div>
                     <div>
-                      <Label htmlFor="sku">SKU *</Label>
+                      <Label htmlFor="sku">SKU * (≤30 chars)</Label>
                       <Input
                         id="sku"
                         value={formData.sku}
-                        onChange={(e) => setFormData(prev => ({ ...prev, sku: e.target.value }))}
+                        onChange={(e) => e.target.value.length <= 30 && setFormData(prev => ({ ...prev, sku: e.target.value }))}
+                        maxLength={30}
                         required
                       />
+                      <p className="text-xs text-muted-foreground mt-1">{formData.sku.length}/30</p>
                     </div>
                   </div>
 
@@ -678,14 +690,16 @@ const EnhancedProductManager = () => {
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <Input
-                      placeholder="Name (e.g., Rose Gold)"
+                      placeholder="Name (e.g., Rose Gold) - ≤50 chars"
                       value={newVariant.name}
-                      onChange={(e) => setNewVariant(prev => ({ ...prev, name: e.target.value }))}
+                      onChange={(e) => e.target.value.length <= 50 && setNewVariant(prev => ({ ...prev, name: e.target.value }))}
+                      maxLength={50}
                     />
                     <Input
-                      placeholder={selectedVariantType === 'colors' ? 'Hex code (e.g., #FF5733)' : 'Value'}
+                      placeholder={selectedVariantType === 'colors' ? 'Hex code (e.g., #FF5733)' : 'Value - ≤30 chars'}
                       value={newVariant.value}
-                      onChange={(e) => setNewVariant(prev => ({ ...prev, value: e.target.value }))}
+                      onChange={(e) => e.target.value.length <= 30 && setNewVariant(prev => ({ ...prev, value: e.target.value }))}
+                      maxLength={30}
                     />
                   </div>
                   <Button type="button" onClick={addVariant} className="w-full">Add Variant</Button>
@@ -714,10 +728,11 @@ const EnhancedProductManager = () => {
                 <CardContent className="space-y-4">
                   <div className="flex gap-2">
                     <Input
-                      placeholder="Add ingredient"
+                      placeholder="Add ingredient (≤100 chars)"
                       value={newIngredient}
-                      onChange={(e) => setNewIngredient(e.target.value)}
+                      onChange={(e) => e.target.value.length <= 100 && setNewIngredient(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addIngredient())}
+                      maxLength={100}
                     />
                     <Button type="button" onClick={addIngredient}>Add</Button>
                   </div>
@@ -740,10 +755,11 @@ const EnhancedProductManager = () => {
                 <CardContent className="space-y-4">
                   <div className="flex gap-2">
                     <Input
-                      placeholder="Add benefit"
+                      placeholder="Add benefit (≤150 chars)"
                       value={newBenefit}
-                      onChange={(e) => setNewBenefit(e.target.value)}
+                      onChange={(e) => e.target.value.length <= 150 && setNewBenefit(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addBenefit())}
+                      maxLength={150}
                     />
                     <Button type="button" onClick={addBenefit}>Add</Button>
                   </div>

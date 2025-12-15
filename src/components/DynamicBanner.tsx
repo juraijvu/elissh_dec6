@@ -159,7 +159,7 @@ const UnusedGridLayout = ({ banners, className, aspectRatio, handleBannerClick }
           onClick={() => handleBannerClick(banner)}
         >
           <img 
-            src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:'}${banner.image}`}
+            src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://elissh.com'}${banner.image}`}
             alt={banner.heading || 'Banner'} 
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />

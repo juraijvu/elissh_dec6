@@ -85,7 +85,7 @@ EOF
 # Build for production
 deploy.bat
 
-# This creates dist folder with correct API URL: https://elissh.com:7000/api
+# This creates dist folder with correct API URL: https://elissh.com/api
 ```
 
 ### 3.2 Upload frontend files:
@@ -298,5 +298,5 @@ pm2 restart elissh-backend
 ---
 
 **🎉 Your Elissh Cosmetics website should now be live at https://elissh.com!**
-**Frontend calls: https://elissh.com:7000/api (Apache proxy)**
+**Frontend calls: https://elissh.com/api (Apache proxy)**
 **Backend runs on: localhost:7001**

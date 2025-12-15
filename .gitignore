@@ -1,16 +1,91 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Environment files
+.env.local
+.env.production
+.env.development.local
+.env.test.local
+
 # Logs
 logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+.env.test
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+
+# Nuxt.js build / generate output
+.nuxt
 dist
-dist-ssr
-*.local
+
+# Gatsby files
+.cache/
+public
+
+# Vite build tool
+.vite
+
+# Rollup cache
+.rollup.cache
+
+# Temporary folders
+tmp/
+temp/
 
 # Editor directories and files
 .vscode/*
@@ -22,8 +97,39 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-*.env
-.env.local
-.env.*.local   
-.env.test.local
-.env.production.local
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# PM2 logs
+logs/
+*.log
+
+# Database
+*.sqlite
+*.db
+
+# Uploads
+uploads/
+backend/uploads/
+
+# Deployment files that cause build issues
+deploy.bat
+server-deploy.sh
+deploy-banner-fix*.sh
